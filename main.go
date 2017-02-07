@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"net/http"
-
 	"log"
 	"os"
 
@@ -16,13 +15,14 @@ type Response struct {
 	Message string
 }
 
+
 func resp(w http.ResponseWriter, r *http.Request) {
 
 	name := pat.Param(r, "something")
 
 	var response Response
 	response.Header = r
-	response.Message = "something given : " + name
+	response.Message = "something "+ r.Method +" : " + name
 
 	log.Println(response.Header)
 	log.Println(response.Message)
@@ -31,13 +31,17 @@ func resp(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	mux := goji.NewMux()
-	mux.HandleFunc(pat.Get("/blue/:something"), resp)
-	mux.HandleFunc(pat.Get("/green/:something"), resp)
+	mux.HandleFunc(pat.Put("/put/:something"), resp)
+	mux.HandleFunc(pat.Get("/get/:something"), resp)
+	mux.HandleFunc(pat.Post("/post/:something"), resp)
+	mux.HandleFunc(pat.Delete("/get/:something"), resp)
+	mux.HandleFunc(pat.Patch("/patch/:something"), resp)
 
 	hostname, err := os.Hostname()
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	const port = 8080
 	log.Println("listening on : "+hostname+":", port)
 	http.ListenAndServe(":8080", mux)
