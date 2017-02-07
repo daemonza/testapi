@@ -1,1 +1,6 @@
-FROM golang:1.6-onbuild
+FROM alpine:latest
+
+COPY main /opt/main
+#RUN chmod +x /opt/main
+
+ENTRYPOINT /opt/main
