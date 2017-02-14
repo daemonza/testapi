@@ -30,6 +30,8 @@ func resp(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+
+	fmt.Println("hello world")
 	mux := goji.NewMux()
 	mux.HandleFunc(pat.Put("/put/:something"), resp)
 	mux.HandleFunc(pat.Get("/get/:something"), resp)
