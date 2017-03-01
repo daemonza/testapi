@@ -2,9 +2,11 @@ package main
 
 import (
 	"fmt"
-	"net/http"
 	"log"
+	"net/http"
 	"os"
+
+	"github.com/golang/glog"
 
 	"goji.io"
 	"goji.io/pat"
@@ -15,23 +17,23 @@ type Response struct {
 	Message string
 }
 
-
 func resp(w http.ResponseWriter, r *http.Request) {
 
 	name := pat.Param(r, "something")
 
 	var response Response
 	response.Header = r
-	response.Message = "something "+ r.Method +" : " + name
+	response.Message = "something " + r.Method + " : " + name
 
+	glog.Info()
 	log.Println(response.Header)
 	log.Println(response.Message)
 	fmt.Fprintf(w, "%s", response)
+
 }
 
 func main() {
 
-	fmt.Println("hello world")
 	mux := goji.NewMux()
 	mux.HandleFunc(pat.Put("/put/:something"), resp)
 	mux.HandleFunc(pat.Get("/get/:something"), resp)
